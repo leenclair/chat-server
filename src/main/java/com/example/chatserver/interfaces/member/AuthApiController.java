@@ -1,8 +1,7 @@
 package com.example.chatserver.interfaces.member;
 
-import com.example.chatserver.application.member.MemberFacade;
 import com.example.chatserver.domain.member.MemberCommand;
-import com.example.chatserver.domain.member.MemberInfo;
+import com.example.chatserver.domain.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,20 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/members")
-public class MemberApiController {
-    private final MemberFacade memberFacade;
+@RequestMapping("/api/v1/auth")
+public class AuthApiController {
+    private final MemberService memberService;
 
-
-    @PostMapping
-    public ResponseEntity<?> createMember(@RequestBody MemberDto.RegisterRequest request) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody MemberDto.LoginRequest request) {;
         MemberCommand command = request.toCommand();
-        MemberInfo memberInfo = memberFacade.createMember(command);
-        MemberDto.CreateResponse response = new MemberDto.CreateResponse(memberInfo);
+        String token = memberService.login(command);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(token);
     }
-
-
-
 }

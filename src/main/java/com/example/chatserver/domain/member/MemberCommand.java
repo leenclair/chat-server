@@ -12,11 +12,11 @@ public class MemberCommand {
     private final String email;
     private final String password;
 
-    public Member toEntity() {
+    public Member toEntity(String encodedPassword) {
         return Member.builder()
                 .name(name)
                 .email(email)
-                .password(password)
+                .password(encodedPassword)
                 .build();
     }
 }

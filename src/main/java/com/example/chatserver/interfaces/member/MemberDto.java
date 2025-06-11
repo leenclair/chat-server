@@ -31,6 +31,23 @@ public class MemberDto {
     }
 
     @Getter
+    @Setter
+    @ToString
+    public static class LoginRequest {
+        @NotBlank(message = "Email is required")
+        private String email;
+        @NotBlank(message = "Password is required")
+        private String password;
+
+        public MemberCommand toCommand() {
+            return MemberCommand.builder()
+                    .email(email)
+                    .password(password)
+                    .build();
+        }
+    }
+
+    @Getter
     @ToString
     public static class CreateResponse {
         private final String memberToken;
@@ -45,4 +62,5 @@ public class MemberDto {
             this.role = memberInfo.getRole();
         }
     }
+
 }
