@@ -19,16 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberApiController {
     private final MemberFacade memberFacade;
 
-
     @PostMapping
     public ResponseEntity<?> createMember(@RequestBody MemberDto.RegisterRequest request) {
-        MemberCommand command = request.toCommand();
-        MemberInfo memberInfo = memberFacade.createMember(command);
-        MemberDto.CreateResponse response = new MemberDto.CreateResponse(memberInfo);
+        MemberCommand.RegisterMemberRequest command = request.toCommand();
+        MemberInfo.Main info = memberFacade.createMember(command);
+        MemberDto.CreateResponse response = new MemberDto.CreateResponse(info);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
-
 
 }

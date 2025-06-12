@@ -32,7 +32,7 @@ public class Member {
     @Getter
     @RequiredArgsConstructor
     public enum Role {
-        ADMIN("관리자"), USER("일반 사용자");
+        ADMIN("ADMIN"), USER("USER");
         private final String description;
     }
 

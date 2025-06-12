@@ -21,8 +21,8 @@ public class MemberDto {
         @NotBlank(message = "Password is required")
         private String password;
 
-        public MemberCommand toCommand() {
-            return MemberCommand.builder()
+        public MemberCommand.RegisterMemberRequest toCommand() {
+            return MemberCommand.RegisterMemberRequest.builder()
                     .name(name)
                     .email(email)
                     .password(password)
@@ -39,8 +39,8 @@ public class MemberDto {
         @NotBlank(message = "Password is required")
         private String password;
 
-        public MemberCommand toCommand() {
-            return MemberCommand.builder()
+        public MemberCommand.AuthenticateRequest toCommand() {
+            return MemberCommand.AuthenticateRequest.builder()
                     .email(email)
                     .password(password)
                     .build();
@@ -55,12 +55,28 @@ public class MemberDto {
         private final String email;
         private final Member.Role role;
 
-        public CreateResponse(MemberInfo memberInfo) {
+        public CreateResponse(MemberInfo.Main memberInfo) {
             this.memberToken = memberInfo.getMemberToken();
             this.name = memberInfo.getName();
             this.email = memberInfo.getEmail();
             this.role = memberInfo.getRole();
         }
+    }
+
+    @Getter
+    @ToString
+    public static class LoginResponse {
+        private final String jwtToken;
+        private final String name;
+        private final String email;
+
+        public LoginResponse(MemberInfo.LoginInfo info) {
+            this.jwtToken = info.getJwtToken();
+            this.name = info.getName();
+            this.email = info.getEmail();
+        }
+
+
     }
 
 }

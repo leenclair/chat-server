@@ -1,6 +1,6 @@
 package com.example.chatserver.domain.member;
 
 public interface MemberService {
-    MemberInfo createMember(MemberCommand memberCommand);
-    String login(MemberCommand memberCommand);
+    MemberInfo.Main createMember(MemberCommand.RegisterMemberRequest command);
+    MemberInfo.AuthenticateInfo authenticate(MemberCommand.AuthenticateRequest command);
 }

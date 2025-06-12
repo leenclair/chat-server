@@ -26,14 +26,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtProvider.validateToken(token)) {
             String email = jwtProvider.getEmailFromToken(token);
+            String role = jwtProvider.getRoleFromToken(token);
 
             Collection<SimpleGrantedAuthority> authorities = Collections.singletonList(
-                    new SimpleGrantedAuthority("ROLE_USER"));
+                    new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()));
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(email, null, authorities);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+        }else {
+            // 토큰이 유효하지 않거나 없을 경우, 인증 정보를 초기화
+            SecurityContextHolder.clearContext();
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid token");
+            return;
         }
 
         filterChain.doFilter(request, response);
