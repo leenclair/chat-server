@@ -6,6 +6,8 @@ import com.example.chatserver.domain.member.MemberReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 public class MemberReaderImpl implements MemberReader {
@@ -15,5 +17,10 @@ public class MemberReaderImpl implements MemberReader {
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+    }
+
+    @Override
+    public List<Member> findAll() {
+        return memberRepository.findAll();
     }
 }

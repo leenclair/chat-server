@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 public class MemberDto {
 
     @Getter
@@ -75,8 +77,28 @@ public class MemberDto {
             this.name = info.getName();
             this.email = info.getEmail();
         }
+    }
 
+    @Getter
+    @ToString
+    public static class RetrieveMemberResponse {
+        private final Long id;
+        private final String memberToken;
+        private final String name;
+        private final String email;
 
+        public RetrieveMemberResponse(MemberInfo.Main memberInfo) {
+            this.id = memberInfo.getId();
+            this.memberToken = memberInfo.getMemberToken();
+            this.name = memberInfo.getName();
+            this.email = memberInfo.getEmail();
+        }
+
+        public static List<RetrieveMemberResponse> listOf(List<MemberInfo.Main> memberInfos) {
+            return memberInfos.stream()
+                    .map(RetrieveMemberResponse::new)
+                    .toList();
+        }
     }
 
 }

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -18,7 +20,6 @@ public class MemberFacade {
     private final TokenGenerator tokenGenerator;
 
     public MemberInfo.Main createMember(MemberCommand.RegisterMemberRequest command) {
-        log.info("Creating member with command: {}", command);
         MemberInfo.Main info = memberService.createMember(command);
         notificationService.sendEmail(info.getEmail(),
                 "Welcome to ChatServer",
@@ -33,6 +34,10 @@ public class MemberFacade {
         String jwtToken = tokenGenerator.generateToken(info);
 
         return new MemberInfo.LoginInfo(jwtToken, info.getName(), info.getEmail());
+    }
+
+    public List<MemberInfo.Main> getMembers() {
+        return memberService.getMembers();
     }
 
 

@@ -6,6 +6,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,5 +34,13 @@ public class MemberServiceImpl implements MemberService {
         passwordVerifier.verify(command.getPassword(), member.getPassword());
 
         return new MemberInfo.AuthenticateInfo(member);
+    }
+
+    @Override
+    public List<MemberInfo.Main> getMembers() {
+        List<Member> members = memberReader.findAll();
+        return members.stream()
+                .map(MemberInfo.Main::new)
+                .toList();
     }
 }
