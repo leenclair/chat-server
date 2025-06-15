@@ -2,12 +2,16 @@ package com.example.chatserver.domain.member;
 
 import com.example.chatserver.common.exception.InvalidRequestException;
 import com.example.chatserver.common.util.TokenGenerator;
+import com.example.chatserver.domain.chatmember.ChatMember;
+import com.google.common.collect.Lists;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 @Getter
 @Entity
@@ -28,6 +32,9 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.PERSIST)
+    private List<ChatMember> chatMembers = Lists.newArrayList();
 
     @Getter
     @RequiredArgsConstructor

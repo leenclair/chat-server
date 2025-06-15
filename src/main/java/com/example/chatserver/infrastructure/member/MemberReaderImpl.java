@@ -16,7 +16,7 @@ public class MemberReaderImpl implements MemberReader {
     @Override
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

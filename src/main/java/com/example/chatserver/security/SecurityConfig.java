@@ -31,7 +31,11 @@ public class SecurityConfig {
             .httpBasic(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(
                     requests -> requests
-                .requestMatchers("/api/v1/members", "/api/v1/auth/login").permitAll()
+                .requestMatchers(
+                        "/api/v1/members",
+                        "/api/v1/auth/login",
+                        "/connect/**")
+                .permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
