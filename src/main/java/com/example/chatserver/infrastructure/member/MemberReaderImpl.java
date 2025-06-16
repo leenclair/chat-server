@@ -16,11 +16,17 @@ public class MemberReaderImpl implements MemberReader {
     @Override
     public Member findByEmail(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(EntityNotFoundException::new);
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with email: " + email));
     }
 
     @Override
     public List<Member> findAll() {
         return memberRepository.findAll();
+    }
+
+    @Override
+    public Member findByMemberToken(String token) {
+        return memberRepository.findByMemberToken(token)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with token: " + token));
     }
 }

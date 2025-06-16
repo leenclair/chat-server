@@ -16,7 +16,7 @@ public class ChatMessageInfo {
 
     public ChatMessageInfo(ChatMessage message) {
         this.messageId = message.getId();
-        this.roomId = message.getRoomId();
+        this.roomId = message.getRoom().getId();
         this.senderId = message.getSenderId();
         this.content = message.getContent();
         this.createdAt = message.getCreatedAt();

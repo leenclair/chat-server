@@ -9,4 +9,5 @@ public interface ChatMessageReader {
     ChatRoom findRoomById(Long roomId);
     List<ChatMember> findActiveMembersByRoomId(Long roomId);
     boolean isUserInRoom(Long userId, Long roomId);
+    List<ChatMessage> getMessagesByRoomId(Long roomId);
 }

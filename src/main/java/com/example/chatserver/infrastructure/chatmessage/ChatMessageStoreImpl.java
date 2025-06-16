@@ -36,7 +36,7 @@ public class ChatMessageStoreImpl implements ChatMessageStore {
     }
 
     private void initializeReadReceipts(ChatMessage message) {
-        List<ReadReceipt> readReceipts = chatMemberRepository.findActiveMembersByRoomId(message.getRoomId())
+        List<ReadReceipt> readReceipts = chatMemberRepository.findActiveMembersByRoomId(message.getRoom().getId())
                 .stream()
                 .map(member -> ReadReceipt.builder()
                         .message(message)

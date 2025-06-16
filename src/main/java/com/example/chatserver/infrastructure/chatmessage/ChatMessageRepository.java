@@ -24,7 +24,7 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
     boolean existsByRoomIdAndSenderId(Long roomId, Long senderId);
 
     // 특정 시간 범위의 메시지 조회
-    @Query("SELECT m FROM ChatMessage m WHERE m.roomId = :roomId " +
+    @Query("SELECT m FROM ChatMessage m WHERE m.room.id = :roomId " +
             "AND m.createdAt BETWEEN :startTime AND :endTime " +
             "ORDER BY m.createdAt DESC")
     List<ChatMessage> findMessagesInTimeRange(
@@ -32,5 +32,7 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> 
             @Param("startTime") ZonedDateTime startTime,
             @Param("endTime") ZonedDateTime endTime);
 
+    // 특정 방의 메시지들 시간순으로 가져오기
+    List<ChatMessage> findByIdOrderByCreatedAtAsc(Long roomId);
 
 }

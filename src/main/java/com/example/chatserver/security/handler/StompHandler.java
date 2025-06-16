@@ -3,6 +3,7 @@ package com.example.chatserver.security.handler;
 import com.example.chatserver.common.exception.EntityNotFoundException;
 import com.example.chatserver.domain.chatroom.ChatRoom;
 import com.example.chatserver.infrastructure.chatroom.ChatRoomRepository;
+import com.example.chatserver.infrastructure.member.MemberRepository;
 import com.example.chatserver.security.JwtProvider;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -29,11 +30,12 @@ public class StompHandler implements ChannelInterceptor {
     private static final int TOKEN_START_INDEX = 7;
     private static final int ROOM_ID_INDEX = 2;
 
-    @Value("${jwt.secretKey}")
+    @Value("${security.jwt.secret}")
     private String secret;
 
     private final JwtProvider jwtProvider;
     private final ChatRoomRepository chatRoomRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -101,8 +103,13 @@ public class StompHandler implements ChannelInterceptor {
         ChatRoom chatRoom = chatRoomRepository.findById(Long.parseLong(roomId))
                 .orElseThrow(EntityNotFoundException::new);
 
-        chatRoom.getChatMembers().stream()
-                .filter(chatMember -> chatMember.getMember().getEmail().equals(email))
+        chatRoom.getMembers().stream()
+                .filter(chatMember ->
+                    memberRepository.findById(chatMember.getUserId())
+                            .orElseThrow(
+                                    () -> new EntityNotFoundException("member not found by id: " + chatMember.getUserId()))
+                            .getEmail().equals(email)
+                )
                 .findFirst()
                 .orElseThrow(() -> new AccessDeniedException("채팅방 접근 권한이 없습니다."));
     }

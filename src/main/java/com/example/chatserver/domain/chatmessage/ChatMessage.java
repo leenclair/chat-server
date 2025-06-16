@@ -1,6 +1,8 @@
 package com.example.chatserver.domain.chatmessage;
 
 import com.example.chatserver.domain.AbstractEntity;
+import com.example.chatserver.domain.chatroom.ChatRoom;
+import com.example.chatserver.domain.member.Member;
 import com.example.chatserver.domain.readreceipt.ReadReceipt;
 import com.google.common.collect.Lists;
 import jakarta.persistence.*;
@@ -20,11 +22,13 @@ public class ChatMessage extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long roomId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "room_id", nullable = false)
+    private ChatRoom room;
 
-    @Column(nullable = false)
-    private Long senderId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member sender;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -45,19 +49,19 @@ public class ChatMessage extends AbstractEntity {
     }
 
     @Builder
-    public ChatMessage(Long roomId, Long senderId, String content) {
-        this.roomId = roomId;
-        this.senderId = senderId;
+    public ChatMessage(ChatRoom room, Member sender, String content) {
+        this.room = room;
+        this.sender = sender;
         this.content = content;
         this.status = MessageStatus.SENDING;
     }
 
-    public void addReadReceipt(ReadReceipt readReceipt) {
-        this.readReceipts.add(readReceipt);
-        readReceipt.sendMessage(this);
-    }
-
-    public void updateStatus(MessageStatus status) {
-        this.status = status;
-    }
+//    public void addReadReceipt(ReadReceipt readReceipt) {
+//        this.readReceipts.add(readReceipt);
+//        readReceipt.sendMessage(this);
+//    }
+//
+//    public void updateStatus(MessageStatus status) {
+//        this.status = status;
+//    }
 }

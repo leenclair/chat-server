@@ -29,12 +29,12 @@ public class ReadReceipt extends AbstractEntity {
     @Column(nullable = false)
     private ZonedDateTime readAt;
 
-    public void readReceipt(Long userId) {
+    public void markAsReceipt(Long userId) {
         this.userId = userId;
         this.readAt = ZonedDateTime.now();
     }
 
-    public void sendMessage(ChatMessage chatMessage) {
+    public void setMessage(ChatMessage chatMessage) {
         this.message = chatMessage;
     }
 
