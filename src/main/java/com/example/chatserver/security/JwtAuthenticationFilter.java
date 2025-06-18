@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
@@ -23,6 +25,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
+        log.info("Request URI: {}", path);
+        // CORS 설정을 위해 OPTIONS 요청은 필터링하지 않음
+        if (request.getMethod().equals("OPTIONS")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // 회원가입, 로그인 경로는 JWT 체크 건너뜀
         if (path.equals("/api/v1/members") && request.getMethod().equals("POST")) {
@@ -35,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String token = resolveToken(request);
+        log.info("Token: {}", token);
 
         if (token != null && jwtProvider.validateToken(token)) {
             String email = jwtProvider.getEmailFromToken(token);

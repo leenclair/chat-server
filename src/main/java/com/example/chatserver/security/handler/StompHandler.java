@@ -30,9 +30,6 @@ public class StompHandler implements ChannelInterceptor {
     private static final int TOKEN_START_INDEX = 7;
     private static final int ROOM_ID_INDEX = 2;
 
-    @Value("${security.jwt.secret}")
-    private String secret;
-
     private final JwtProvider jwtProvider;
     private final ChatRoomRepository chatRoomRepository;
     private final MemberRepository memberRepository;
@@ -41,6 +38,7 @@ public class StompHandler implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         final StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         final StompCommand command = accessor.getCommand();
+        log.info("Stomp command: {}", command);
 
         try {
             if (StompCommand.CONNECT.equals(command)) {

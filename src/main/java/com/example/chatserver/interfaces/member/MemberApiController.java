@@ -33,6 +33,9 @@ public class MemberApiController {
         log.info("Received request to get all members");
         var info = memberFacade.getMembers();
         var response = MemberDto.RetrieveMemberResponse.listOf(info);
+        for (MemberDto.RetrieveMemberResponse retrieveMemberResponse : response) {
+            log.info("Member Info: {}", retrieveMemberResponse);
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

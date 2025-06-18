@@ -38,6 +38,7 @@ public class ChatRoomInfo {
         private final String content;
         private final String status;
         private final String sentAt;
+        private final Long readCount;
 
         public MessageResponse(ChatMessage message) {
             this.messageId = message.getId();
@@ -46,6 +47,14 @@ public class ChatRoomInfo {
             this.content = message.getContent();
             this.status = message.getStatus().toString();
             this.sentAt = message.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            this.readCount = calculateReadCount(message);
+        }
+
+        private Long calculateReadCount(ChatMessage message) {
+            // 읽은 사람 수 계산 로직
+            return message.getReadReceipts().stream()
+                    .filter(receipt -> receipt.getReadAt() != null)
+                    .count();
         }
     }
 

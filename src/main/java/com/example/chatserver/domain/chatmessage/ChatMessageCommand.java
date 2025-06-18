@@ -1,5 +1,6 @@
 package com.example.chatserver.domain.chatmessage;
 
+import com.example.chatserver.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -14,9 +15,9 @@ public class ChatMessageCommand {
         private Long senderId;
         private String content;
 
-        public ChatMessage toEntity() {
+        public ChatMessage toEntity(Member sender) {
             return ChatMessage.builder()
-                    .senderId(senderId)
+                    .sender(sender)
                     .content(content)
                     .build();
         }

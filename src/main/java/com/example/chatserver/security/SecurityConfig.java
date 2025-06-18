@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .requestMatchers(
                         "/api/v1/members",
                         "/api/v1/auth/login",
+                        "/ws/**",
                         "/connect/**")
                 .permitAll()
                 .anyRequest().authenticated()
@@ -50,7 +51,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:3000"));
-        configuration.setAllowedMethods(List.of("*")); //모든 HTTP메서드 허용
+        configuration.setAllowedMethods(List.of("GET", "POST", "OPTIONS")); //모든 HTTP메서드 허용
         configuration.setAllowedHeaders(List.of("*")); //모든 헤더값 허용
         configuration.setAllowCredentials(true); //자격증명허용
 

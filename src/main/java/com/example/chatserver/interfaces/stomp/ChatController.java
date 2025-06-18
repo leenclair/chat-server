@@ -19,7 +19,8 @@ public class ChatController {
     private final ChatMessageFacade chatMessageFacade;
     private final SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/chat/{roomId}/message")
+//    @MessageMapping("/chat/{roomId}/message")
+    @MessageMapping("/{roomId}")
     public void sendMessage(@DestinationVariable String roomId, ChatDto.ChatMessageRequest request) {
         // 여기에 메시지를 처리하는 로직을 추가합니다.
         // 예: 메시지를 데이터베이스에 저장하고, 해당 채팅방에 있는 모든 사용자에게 메시지를 전송합니다.
