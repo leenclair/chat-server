@@ -31,8 +31,8 @@ public class ChatMessageReadImpl implements ChatMessageReader {
     }
 
     @Override
-    public boolean isUserInRoom(Long userId, Long roomId) {
-        return chatMemberRepository.existsByUserIdAndRoomIdAndLeaveAtIsNull(userId, roomId);
+    public boolean isUserInRoom(String userEmail, Long roomId) {
+        return chatMemberRepository.existsByEmailAndRoomIdAndLeaveAtIsNull(userEmail, roomId);
     }
 
     @Override

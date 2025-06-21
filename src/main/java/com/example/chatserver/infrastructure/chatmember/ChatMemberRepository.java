@@ -13,7 +13,13 @@ public interface ChatMemberRepository extends JpaRepository<ChatMember, Long> {
     List<ChatMember> findByRoomIdAndLeaveAtIsNull(Long roomId);
 
     // 특정 사용자의 채팅방 참여 여부 확인
-    boolean existsByUserIdAndRoomIdAndLeaveAtIsNull(Long userId, Long roomId);
+    @Query("SELECT CASE WHEN COUNT(m) > 0 THEN TRUE ELSE FALSE END " +
+    "FROM ChatMember m " +
+    "WHERE m.member.email = :userEmail " +
+    "AND m.room.id = :roomId " +
+    "AND m.leaveAt IS NULL"
+    )
+    boolean existsByEmailAndRoomIdAndLeaveAtIsNull(String userEmail, Long roomId);
 
     // 채팅방의 멤버 수 조회
     long countByRoomIdAndLeaveAtIsNull(Long roomId);

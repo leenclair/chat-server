@@ -38,6 +38,7 @@ public class ChatRoomApiController {
         var response = info.stream()
                 .map(messageInfo -> new ChatRoomDto.retrieveMessagesResponse(messageInfo, currentMember.getId()))
                 .toList();
+        log.info("Retrieved {} messages for chat room ID: {}", response.size(), roomId);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }

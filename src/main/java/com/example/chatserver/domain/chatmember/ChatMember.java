@@ -25,11 +25,9 @@ public class ChatMember {
     @JoinColumn(name = "room_id", nullable = false)
     private ChatRoom room;
 
-    @Column(nullable = false)
-    private Long userId;
-
-    @Column(nullable = false)
-    private String nickname;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @Column(nullable = false)
     private ZonedDateTime joinAt;
@@ -43,9 +41,9 @@ public class ChatMember {
     private boolean alarmOn;
 
     @Builder
-    public ChatMember(Long userId, String nickname) {
-        this.userId = userId;
-        this.nickname = nickname;
+    public ChatMember(Member member, ChatRoom room) {
+        this.member = member;
+        this.room = room;
         this.joinAt = ZonedDateTime.now();
         this.kicked = false;
         this.alarmOn = true;

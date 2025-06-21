@@ -42,8 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        // WebSocket 관련 경로 추가
+        if (path.startsWith("/connect/") || path.startsWith("/ws/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String token = resolveToken(request);
-        log.info("Token: {}", token);
 
         if (token != null && jwtProvider.validateToken(token)) {
             String email = jwtProvider.getEmailFromToken(token);

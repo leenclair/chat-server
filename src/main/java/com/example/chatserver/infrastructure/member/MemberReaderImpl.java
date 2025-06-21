@@ -29,4 +29,10 @@ public class MemberReaderImpl implements MemberReader {
         return memberRepository.findByMemberToken(token)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found with token: " + token));
     }
+
+    @Override
+    public Member findById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found with id: " + id));
+    }
 }

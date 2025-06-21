@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ChatMessageService {
     ChatMessage processMessage(Long roomId, ChatMessageCommand.RegisterMessage command);
-    boolean isUserInRoom(Long userId, Long roomId);
+    boolean isUserInRoom(String userEmail, Long roomId);
     List<ChatRoomInfo.MessageResponse> findMessagesByRoomId(Long roomId);
 }

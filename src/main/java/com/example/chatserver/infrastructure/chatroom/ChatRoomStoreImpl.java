@@ -22,14 +22,12 @@ public class ChatRoomStoreImpl implements ChatRoomStore {
 
     @Override
     @Transactional
-    public ChatRoom createPrivateChatRoom(Long member1Id, Long member2Id) {
+    public ChatRoom createPrivateChatRoom(Member member1, Member member2) {
         ChatMember chatMember1 = ChatMember.builder()
-                .userId(member1Id)
-                .nickname(getMemberNickname(member1Id))
+                .member(member1)
                 .build();
         ChatMember chatMember2 = ChatMember.builder()
-                .userId(member2Id)
-                .nickname(getMemberNickname(member2Id))
+                .member(member2)
                 .build();
 
         // 1. 새로운 1:1 채팅방 생성

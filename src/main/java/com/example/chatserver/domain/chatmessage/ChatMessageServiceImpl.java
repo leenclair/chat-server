@@ -20,6 +20,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
 
     @Transactional
     public ChatMessage processMessage(Long roomId, ChatMessageCommand.RegisterMessage command) {
+        log.info("processMessage called with roomId: {}, command: {}", roomId, command);
         // 1. 방 존재 여부 확인
         ChatRoom room = chatMessageReader.findRoomById(roomId);
         if(room==null){
@@ -27,8 +28,9 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         }
 
         // 2. 사용자가 방에 있는지 확인
-        if (!chatMessageReader.isUserInRoom(command.getSenderId(), roomId)) {
-            throw new EntityNotFoundException("roomId:" + roomId + "에 해당하는 사용자:" + command.getSenderId()  + " 가 방에 없습니다.");
+        if (!chatMessageReader.isUserInRoom(command.getSenderEmail(), roomId)) {
+            throw new EntityNotFoundException("roomId:" + roomId + "에 해당하는 사용자:"
+                    + command.getSenderEmail()  + " 가 방에 없습니다.");
         }
 
         // 3. 메시지 저장
@@ -43,7 +45,7 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     }
 
     @Override
-    public boolean isUserInRoom(Long userId, Long roomId) {
+    public boolean isUserInRoom(String userEmail, Long roomId) {
         // 1. 방 존재 여부 확인
         ChatRoom room = chatMessageReader.findRoomById(roomId);
         if(room==null){
@@ -52,8 +54,8 @@ public class ChatMessageServiceImpl implements ChatMessageService {
         }
 
         // 2. 사용자가 방에 있는지 확인
-        if (!chatMessageReader.isUserInRoom(userId, roomId)) {
-            log.info("roomId:{} 에 해당하는 사용자: {}가 방에 없습니다.", roomId, userId);
+        if (!chatMessageReader.isUserInRoom(userEmail, roomId)) {
+            log.info("roomId:{} 에 해당하는 사용자: {}가 방에 없습니다.", roomId, userEmail);
             return false;
         }else return true;
     }
@@ -61,6 +63,11 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     @Override
     public List<ChatRoomInfo.MessageResponse> findMessagesByRoomId(Long roomId) {
         List<ChatMessage> messages = chatMessageReader.getMessagesByRoomId(roomId);
+        if (messages.isEmpty()) {
+            log.info("roomId:{} 에 해당하는 메시지가 없습니다.", roomId);
+            return List.of();
+        }
+        log.info("roomId:{} 에 해당하는 메시지 목록을 조회했습니다. 메시지 개수: {}", roomId, messages.size());
         return messages.stream()
                 .map(ChatRoomInfo.MessageResponse::new)
                 .toList();

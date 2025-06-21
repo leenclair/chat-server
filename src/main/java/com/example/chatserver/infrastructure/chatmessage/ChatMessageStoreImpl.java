@@ -4,9 +4,11 @@ import com.example.chatserver.common.exception.EntityNotFoundException;
 import com.example.chatserver.domain.chatmessage.ChatMessage;
 import com.example.chatserver.domain.chatmessage.ChatMessageCommand;
 import com.example.chatserver.domain.chatmessage.ChatMessageStore;
+import com.example.chatserver.domain.chatroom.ChatRoom;
 import com.example.chatserver.domain.member.Member;
 import com.example.chatserver.domain.readreceipt.ReadReceipt;
 import com.example.chatserver.infrastructure.chatmember.ChatMemberRepository;
+import com.example.chatserver.infrastructure.chatroom.ChatRoomRepository;
 import com.example.chatserver.infrastructure.member.MemberRepository;
 import com.example.chatserver.infrastructure.readreceipt.ReadReceiptRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +28,18 @@ public class ChatMessageStoreImpl implements ChatMessageStore {
     private final ReadReceiptRepository readReceiptRepository;
     private final ChatMemberRepository chatMemberRepository;
     private final MemberRepository memberRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     @Transactional
     public ChatMessage saveMessage(ChatMessageCommand.RegisterMessage command) {
         // 1. 메시지 저장
-        Member sender = memberRepository.findById(command.getSenderId())
-                .orElseThrow(() -> new EntityNotFoundException("Sender not found with ID: " + command.getSenderId()));
-        ChatMessage message = command.toEntity(sender);
+        Member sender = memberRepository.findByEmail(command.getSenderEmail())
+                .orElseThrow(() -> new EntityNotFoundException("Sender not found with Email: " + command.getSenderEmail()));
+
+        ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Room not found with ID: " + command.getRoomId()));
+        ChatMessage message = command.toEntity(sender, chatRoom);
 
         ChatMessage savedMessage = chatMessageRepository.save(message);
 
@@ -47,7 +54,7 @@ public class ChatMessageStoreImpl implements ChatMessageStore {
                 .stream()
                 .map(member -> ReadReceipt.builder()
                         .message(message)
-                        .userId(member.getUserId())
+                        .userId(member.getMember().getId())
                         .build())
                 .toList();
 

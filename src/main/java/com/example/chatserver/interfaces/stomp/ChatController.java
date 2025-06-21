@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -19,9 +18,9 @@ public class ChatController {
     private final ChatMessageFacade chatMessageFacade;
     private final SimpMessagingTemplate messagingTemplate;
 
-//    @MessageMapping("/chat/{roomId}/message")
     @MessageMapping("/{roomId}")
-    public void sendMessage(@DestinationVariable String roomId, ChatDto.ChatMessageRequest request) {
+    public void sendMessage(@DestinationVariable String roomId,
+                            ChatDto.ChatMessageRequest request) {
         // 여기에 메시지를 처리하는 로직을 추가합니다.
         // 예: 메시지를 데이터베이스에 저장하고, 해당 채팅방에 있는 모든 사용자에게 메시지를 전송합니다.
         log.info("Received message for room: {}, Payload: {}", roomId, request);
@@ -34,10 +33,10 @@ public class ChatController {
             String jsonResponse = objectMapper.writeValueAsString(response);
             log.info("Sending response: {}", jsonResponse);
             messagingTemplate.convertAndSend(
-                    "/topic/chat/" + roomId,
+                    "/topic/" + roomId,
                     response
             );
-            log.debug("Message processed and sent successfully for room: {}", roomId);
+            log.info("Message processed and sent successfully for room: {}", roomId);
         } catch (Exception e) {
             log.error("Error processing message: {}", e.getMessage());
         }

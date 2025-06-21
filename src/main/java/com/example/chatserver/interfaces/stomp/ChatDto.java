@@ -19,13 +19,14 @@ public class ChatDto {
         @NotNull(message = "roomId 는 필수값입니다")
         private Long roomId;
         @NotBlank(message = "sender 는 필수값입니다")
-        private Long senderId;
+        private String senderEmail;
         @NotBlank(message = "content 는 필수값입니다")
         private String content;
 
         public ChatMessageCommand.RegisterMessage toCommand() {
             return ChatMessageCommand.RegisterMessage.builder()
-                    .senderId(senderId)
+                    .roomId(roomId)
+                    .senderEmail(senderEmail)
                     .content(content)
                     .build();
         }
@@ -36,7 +37,8 @@ public class ChatDto {
     public static class ChatMessageResponse {
         private final Long messageId;
         private final Long roomId;
-        private final Long senderId;
+        private final String senderEmail;
+        private final String senderNickname;
         private final String content;
         private final String createdAt;
         private final String status;
@@ -44,7 +46,8 @@ public class ChatDto {
         public ChatMessageResponse(ChatMessageInfo chatMessageInfo) {
             this.messageId = chatMessageInfo.getMessageId();
             this.roomId = chatMessageInfo.getRoomId();
-            this.senderId = chatMessageInfo.getSenderId();
+            this.senderEmail = chatMessageInfo.getSenderEmail();
+            this.senderNickname = chatMessageInfo.getSenderNickname();
             this.content = chatMessageInfo.getContent();
             this.createdAt = chatMessageInfo.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             this.status = chatMessageInfo.getStatus().name();

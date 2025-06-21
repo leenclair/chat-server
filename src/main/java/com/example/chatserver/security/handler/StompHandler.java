@@ -2,13 +2,16 @@ package com.example.chatserver.security.handler;
 
 import com.example.chatserver.common.exception.EntityNotFoundException;
 import com.example.chatserver.domain.chatroom.ChatRoom;
+import com.example.chatserver.domain.chatroom.ChatRoomInfo;
+import com.example.chatserver.domain.chatroom.ChatRoomReader;
+import com.example.chatserver.domain.chatroom.ChatRoomService;
+import com.example.chatserver.domain.member.MemberService;
 import com.example.chatserver.infrastructure.chatroom.ChatRoomRepository;
 import com.example.chatserver.infrastructure.member.MemberRepository;
 import com.example.chatserver.security.JwtProvider;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessagingException;
@@ -31,20 +34,18 @@ public class StompHandler implements ChannelInterceptor {
     private static final int ROOM_ID_INDEX = 2;
 
     private final JwtProvider jwtProvider;
-    private final ChatRoomRepository chatRoomRepository;
-    private final MemberRepository memberRepository;
+    private final ChatRoomService chatRoomService;
+    private final MemberService memberService;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         final StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         final StompCommand command = accessor.getCommand();
-        log.info("Stomp command: {}", command);
 
         try {
             if (StompCommand.CONNECT.equals(command)) {
-                log.debug("Validating token for CONNECT request");
                 validateToken(accessor);
-                log.debug("Token validation completed successfully");
+                log.info("Token validation completed successfully");
             }
 
             if (StompCommand.SUBSCRIBE.equals(command)) {
@@ -54,11 +55,9 @@ public class StompHandler implements ChannelInterceptor {
                 }
 
                 String token = bearerToken.substring(TOKEN_START_INDEX);
-                log.debug("Validating token and room access for SUBSCRIBE request");
                 if(jwtProvider.validateToken(token)){
                     String email = jwtProvider.getEmailFromToken(token);
                     validateRoomAccess(email, accessor);
-                    log.debug("Room access validation completed successfully");
                 }else {
                     log.error("Invalid token in SUBSCRIBE request");
                     throw new BadCredentialsException("Invalid JWT token");
@@ -83,6 +82,7 @@ public class StompHandler implements ChannelInterceptor {
         if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
             throw new BadCredentialsException("Missing or invalid Authorization header");
         }
+
     }
 
     private void validateRoomAccess(String email, StompHeaderAccessor accessor) {
@@ -96,19 +96,11 @@ public class StompHandler implements ChannelInterceptor {
         if (parts.length <= ROOM_ID_INDEX) {
             throw new MessagingException("Invalid destination format");
         }
-
         String roomId = parts[ROOM_ID_INDEX];
-        ChatRoom chatRoom = chatRoomRepository.findById(Long.parseLong(roomId))
-                .orElseThrow(EntityNotFoundException::new);
+        boolean inRoom = chatRoomService.isUserInRoom(email, Long.parseLong(roomId));
 
-        chatRoom.getMembers().stream()
-                .filter(chatMember ->
-                    memberRepository.findById(chatMember.getUserId())
-                            .orElseThrow(
-                                    () -> new EntityNotFoundException("member not found by id: " + chatMember.getUserId()))
-                            .getEmail().equals(email)
-                )
-                .findFirst()
-                .orElseThrow(() -> new AccessDeniedException("채팅방 접근 권한이 없습니다."));
+        if(!inRoom) {
+            throw new AccessDeniedException("채팅방 접근 권한이 없습니다.");
+        }
     }
 }

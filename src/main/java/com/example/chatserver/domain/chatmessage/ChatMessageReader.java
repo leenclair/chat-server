@@ -8,6 +8,6 @@ import java.util.List;
 public interface ChatMessageReader {
     ChatRoom findRoomById(Long roomId);
     List<ChatMember> findActiveMembersByRoomId(Long roomId);
-    boolean isUserInRoom(Long userId, Long roomId);
+    boolean isUserInRoom(String userEmail, Long roomId);
     List<ChatMessage> getMessagesByRoomId(Long roomId);
 }

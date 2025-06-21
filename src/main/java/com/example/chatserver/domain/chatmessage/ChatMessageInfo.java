@@ -9,7 +9,8 @@ public class ChatMessageInfo {
 
     private final Long messageId;
     private final Long roomId;
-    private final Long senderId;
+    private final String senderEmail;
+    private final String senderNickname;
     private final String content;
     private final ZonedDateTime createdAt;
     private final ChatMessage.MessageStatus status;
@@ -17,7 +18,8 @@ public class ChatMessageInfo {
     public ChatMessageInfo(ChatMessage message) {
         this.messageId = message.getId();
         this.roomId = message.getRoom().getId();
-        this.senderId = message.getSender().getId();
+        this.senderEmail = message.getSender().getEmail();
+        this.senderNickname = message.getSender().getNickname();
         this.content = message.getContent();
         this.createdAt = message.getCreatedAt();
         this.status = message.getStatus();

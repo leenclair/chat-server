@@ -6,4 +6,5 @@ public interface MemberReader {
     Member findByEmail(String email);
     List<Member> findAll();
     Member findByMemberToken(String token);
+    Member findById(Long id);
 }
