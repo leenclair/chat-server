@@ -1,7 +1,8 @@
 package com.example.chatserver.security.service;
 
-import com.example.chatserver.domain.member.Member;
-import com.example.chatserver.infrastructure.member.MemberRepository;
+import com.example.chatserver.common.exception.EntityNotFoundException;
+import com.example.chatserver.domain.user.User;
+import com.example.chatserver.infrastructure.user.UserRepository;
 import com.example.chatserver.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +18,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FormUserDetailsService implements UserDetailsService {
 
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Member> user = memberRepository.findByEmail(username);
+        Optional<User> user = userRepository.findByEmail(username);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("No user found with username: " + username);
+            throw new EntityNotFoundException();
         }
         log.info("Loading user by username: {}", username);
 

@@ -44,27 +44,4 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registration.interceptors(stompHandler);
     }
 
-//    @Override
-//    public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
-//        registration.setMessageSizeLimit(64 * 1024) // 64KB
-//                .setSendBufferSizeLimit(512 * 1024) // 512KB
-//                .setSendTimeLimit(20 * 1000); // 20 seconds
-//    }
-//
-//    @Bean
-//    public TaskScheduler heartbeatScheduler() {
-//        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-//        scheduler.setPoolSize(1);
-//        scheduler.setThreadNamePrefix("ws-heartbeat-scheduler-");
-//        scheduler.initialize();
-//        return scheduler;
-//    }
-//
-//    @Override
-//    public void configureClientOutboundChannel(ChannelRegistration registration) {
-//        registration.taskExecutor()
-//                .corePoolSize(4)
-//                .maxPoolSize(8)
-//                .queueCapacity(100);
-//    }
 }

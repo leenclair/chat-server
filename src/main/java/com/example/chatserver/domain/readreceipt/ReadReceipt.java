@@ -1,47 +1,30 @@
 package com.example.chatserver.domain.readreceipt;
 
 import com.example.chatserver.domain.AbstractEntity;
-import com.example.chatserver.domain.chatmessage.ChatMessage;
+import com.example.chatserver.domain.message.Message;
+import com.example.chatserver.domain.user.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "read_receipts")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ReadReceipt extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long readReceiptId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "message_id", nullable = false)
-    private ChatMessage message;
+    private Message message;
 
-    @Column(nullable = false)
-    private Long userId;
-
-    @Column(nullable = false)
-    private ZonedDateTime readAt;
-
-    public void markAsReceipt(Long userId) {
-        this.userId = userId;
-        this.readAt = ZonedDateTime.now();
-    }
-
-    public void setMessage(ChatMessage chatMessage) {
-        this.message = chatMessage;
-    }
-
-    @Builder
-    public ReadReceipt(Long userId, ChatMessage message) {
-        this.userId = userId;
-        this.message = message;
-        this.readAt = ZonedDateTime.now();
-    }
+    private LocalDateTime readAt;
 }

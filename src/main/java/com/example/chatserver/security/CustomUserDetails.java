@@ -1,6 +1,6 @@
 package com.example.chatserver.security;
 
-import com.example.chatserver.domain.member.Member;
+import com.example.chatserver.domain.user.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,14 +10,14 @@ import java.util.Collections;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final Member member;
+    private final User user;
 
-    public CustomUserDetails(Member member) {
-        this.member = member;
+    public CustomUserDetails(User user) {
+        this.user = user;
     }
 
-    public Member getMember() {
-        return member;
+    public User getUser() {
+        return user;
     }
 
     @Override
@@ -28,12 +28,12 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return member.getEmail(); // 이메일을 username으로 쓴다고 가정
+        return user.getEmail(); // 이메일을 username으로 쓴다고 가정
     }
 
     @Override

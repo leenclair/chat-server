@@ -1,13 +1,5 @@
 package com.example.chatserver.security.handler;
 
-import com.example.chatserver.common.exception.EntityNotFoundException;
-import com.example.chatserver.domain.chatroom.ChatRoom;
-import com.example.chatserver.domain.chatroom.ChatRoomInfo;
-import com.example.chatserver.domain.chatroom.ChatRoomReader;
-import com.example.chatserver.domain.chatroom.ChatRoomService;
-import com.example.chatserver.domain.member.MemberService;
-import com.example.chatserver.infrastructure.chatroom.ChatRoomRepository;
-import com.example.chatserver.infrastructure.member.MemberRepository;
 import com.example.chatserver.security.JwtProvider;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +10,6 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
@@ -34,8 +25,6 @@ public class StompHandler implements ChannelInterceptor {
     private static final int ROOM_ID_INDEX = 2;
 
     private final JwtProvider jwtProvider;
-    private final ChatRoomService chatRoomService;
-    private final MemberService memberService;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -97,10 +86,5 @@ public class StompHandler implements ChannelInterceptor {
             throw new MessagingException("Invalid destination format");
         }
         String roomId = parts[ROOM_ID_INDEX];
-        boolean inRoom = chatRoomService.isUserInRoom(email, Long.parseLong(roomId));
-
-        if(!inRoom) {
-            throw new AccessDeniedException("채팅방 접근 권한이 없습니다.");
-        }
     }
 }

@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // 회원가입, 로그인 경로는 JWT 체크 건너뜀
-        if (path.equals("/api/v1/members") && request.getMethod().equals("POST")) {
+        if (path.equals("/api/v1/users") && request.getMethod().equals("POST")) {
             filterChain.doFilter(request, response);
             return;
         }
