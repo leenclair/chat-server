@@ -2,6 +2,7 @@ package com.example.chatserver.domain.user;
 
 import com.example.chatserver.domain.AbstractEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,6 @@ public class User extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private Status status; // Enum 추천: ACTIVE, WITHDRAWN 등
 
-
     @Getter
     @RequiredArgsConstructor
     public enum Status{
@@ -32,6 +32,13 @@ public class User extends AbstractEntity {
 
         private final String description;
     }
-    // 프로필/설정 등 단방향 매핑 추천
+
+    @Builder
+    public User(String email,
+                String password) {
+        this.email = email;
+        this.password = password;
+        this.status = Status.ACTIVE;
+    }
 }
 

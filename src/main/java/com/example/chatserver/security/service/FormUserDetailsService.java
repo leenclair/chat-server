@@ -24,7 +24,7 @@ public class FormUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByEmail(username);
         if (user.isEmpty()) {
-            throw new EntityNotFoundException();
+            throw new EntityNotFoundException("No user found with username: " + username);
         }
         log.info("Loading user by username: {}", username);
 
