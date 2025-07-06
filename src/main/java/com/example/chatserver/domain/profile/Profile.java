@@ -4,6 +4,7 @@ import com.example.chatserver.domain.AbstractEntity;
 import com.example.chatserver.domain.profileimage.ProfileImage;
 import com.example.chatserver.domain.user.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,5 +34,22 @@ public class Profile extends AbstractEntity {
     @JoinColumn(name = "profile_image_id")
     private ProfileImage profileImage; // 대표 이미지 (nullable)
 
+    @Builder
+    public Profile(User user,
+                   String name,
+                   String nickname,
+                   String phoneNumber,
+                   ProfileImage profileImage
+    ) {
+        this.user = user;
+        this.name = name;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.profileImage = profileImage;
+    }
+
+    public void updateProfileImage(ProfileImage profileImage) {
+        this.profileImage = profileImage;
+    }
 }
 

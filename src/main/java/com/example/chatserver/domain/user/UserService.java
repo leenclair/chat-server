@@ -1,7 +1,9 @@
 package com.example.chatserver.domain.user;
 
+import com.example.chatserver.interfaces.auth.AuthDto;
 import com.example.chatserver.interfaces.user.UserDto;
 
 public interface UserService {
-    UserDto.SignUpResponse registerUser(UserDto.SignUpRequest request);
+    User registerUser(UserDto.SignUpRequest request);
+    User login(AuthDto.LoginRequest request);
 }

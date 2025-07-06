@@ -30,10 +30,10 @@ public class JwtProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String email, String role) {
+    public String createToken(String email) {
         Claims claims = Jwts.claims()
                 .subject(email)
-                .add("role", role)
+                .add("role", "ROLE_USER") // 기본 역할 설정
                 .build();
 
         Date now = new Date();

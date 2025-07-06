@@ -13,6 +13,7 @@ public class UserDto {
     public static class SignUpRequest {
         private String email;
         private String password;
+        private String phoneNumber;
 
         public User toEntity(String passwordHashed) {
             return User.builder()
@@ -25,15 +26,17 @@ public class UserDto {
     @Getter
     @ToString
     public static class SignUpResponse {
+        private final Long userId;
         private final String email;
         private final String role;
 
         public SignUpResponse(User user) {
+            this.userId = user.getId();
             this.email = user.getEmail();
             this.role = "ROLE_USER"; // Default role
         }
-
-
     }
+
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.chatserver.interfaces.user;
 
 import com.example.chatserver.application.user.UserFacade;
+import com.example.chatserver.domain.notification.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserApiController {
 
     private final UserFacade userFacade;
+    private final NotificationService notificationService;
 
     @PostMapping("/api/v1/users")
     public ResponseEntity<?> createUser(@RequestBody UserDto.SignUpRequest request) {
         log.info("Create user request received: {}", request.getEmail());
 
         var response = userFacade.registerUser(request);
+        // Send a welcome email
+        notificationService.sendEmail(
+                request.getEmail(),
+                "Welcome to ChatServer",
+                "Thank you for registering with ChatServer!"
+        );
 
         return ResponseEntity.ok().body(response);
     }
