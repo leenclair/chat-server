@@ -3,6 +3,7 @@ package com.example.chatserver.domain.friend;
 import com.example.chatserver.domain.AbstractEntity;
 import com.example.chatserver.domain.user.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +40,15 @@ public class Friend extends AbstractEntity {
         PENDING("대기중"), ACCEPTED("승인됨"), REJECTED("거절됨");
 
         private final String description;
+    }
+
+    @Builder
+    public Friend(User requester, User receiver) {
+        this.requester = requester;
+        this.receiver = receiver;
+        this.status = Status.ACCEPTED;
+        this.requestedAt = LocalDateTime.now();
+        this.respondedAt = LocalDateTime.now();
     }
 }
 

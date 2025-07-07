@@ -1,5 +1,6 @@
 package com.example.chatserver.domain.profile;
 
+import com.example.chatserver.common.exception.EntityNotFoundException;
 import com.example.chatserver.domain.profileimage.ProfileImage;
 import com.example.chatserver.domain.user.User;
 import com.example.chatserver.infrastructure.profile.ProfileRepository;
@@ -39,5 +40,11 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public void updateProfileImage(Long profileId, ProfileImage profileImage) {
         profileRepository.updateProfileImageId(profileId, profileImage);
+    }
+
+    @Override
+    public Profile getProfileByUserId(Long userId) {
+        return profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Profile not found for user ID: " + userId));
     }
 }

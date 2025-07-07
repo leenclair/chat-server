@@ -22,8 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserFacade {
 
-
-
     private final UserService userService;
     private final ProfileService profileService;
     private final ProfileImageFileService profileImageFileService;

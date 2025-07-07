@@ -1,12 +1,15 @@
 package com.example.chatserver.domain.user;
 
 import com.example.chatserver.common.exception.InvalidRequestException;
+import com.example.chatserver.infrastructure.user.UserRepository;
 import com.example.chatserver.interfaces.auth.AuthDto;
 import com.example.chatserver.interfaces.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -16,7 +19,7 @@ public class UserServiceImpl implements UserService {
     private final UserStore userStore;
     private final UserReader userReader;
     private final PasswordEncoder passwordEncoder;
-
+    private final UserRepository userRepository;
 
     @Override
     public User registerUser(UserDto.SignUpRequest request) {
@@ -34,5 +37,10 @@ public class UserServiceImpl implements UserService {
         }else {
             throw new InvalidRequestException("Invalid email or password");
         }
+    }
+
+    @Override
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }

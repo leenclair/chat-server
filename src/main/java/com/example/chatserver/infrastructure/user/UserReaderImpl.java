@@ -19,4 +19,14 @@ public class UserReaderImpl implements UserReader {
         return userRepository.findByEmail(email)
                 .orElseThrow(EntityNotFoundException::new);
     }
+
+    @Override
+    public User searchUser(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+    }
 }
