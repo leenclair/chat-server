@@ -2,6 +2,7 @@ package com.example.chatserver.domain.room;
 
 import com.example.chatserver.domain.AbstractEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class Room extends AbstractEntity {
     private String name;
 
     @Column(nullable = false)
-    private String type;
+    private String type; // 예: "ONE_TO_ONE", "GROUP"
 
     @Enumerated(EnumType.STRING)
     private Status status;
@@ -30,5 +31,12 @@ public class Room extends AbstractEntity {
         ACTIVE("활성화"), WITHDRAWN("비활성화");
 
         private final String description;
+    }
+
+    @Builder
+    public Room(String name, String type, Status status) {
+        this.name = name;
+        this.type = type;
+        this.status = status;
     }
 }

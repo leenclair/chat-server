@@ -6,12 +6,10 @@ import com.example.chatserver.domain.profile.Profile;
 import com.example.chatserver.domain.profile.ProfileService;
 import com.example.chatserver.domain.user.User;
 import com.example.chatserver.domain.user.UserReader;
-import com.example.chatserver.domain.user.UserService;
 import com.example.chatserver.interfaces.friend.FriendDto;
 import com.example.chatserver.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

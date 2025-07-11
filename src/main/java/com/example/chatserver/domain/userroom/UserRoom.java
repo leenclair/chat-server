@@ -4,6 +4,7 @@ import com.example.chatserver.domain.AbstractEntity;
 import com.example.chatserver.domain.room.Room;
 import com.example.chatserver.domain.user.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -38,4 +39,22 @@ public class UserRoom extends AbstractEntity {
 
     @Column(nullable = false)
     private boolean isLeft;
+
+    @Builder
+    public UserRoom(User user,
+                    Room room,
+                    Long notReadChat,
+                    Long lastReadMessageId,
+                    LocalDateTime joinedAt,
+                    LocalDateTime leftAt,
+                    boolean isLeft
+    ) {
+        this.user = user;
+        this.room = room;
+        this.notReadChat = notReadChat;
+        this.lastReadMessageId = lastReadMessageId;
+        this.joinedAt = joinedAt;
+        this.leftAt = leftAt;
+        this.isLeft = isLeft;
+    }
 }
