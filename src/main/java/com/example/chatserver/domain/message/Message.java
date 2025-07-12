@@ -4,6 +4,7 @@ import com.example.chatserver.domain.AbstractEntity;
 import com.example.chatserver.domain.room.Room;
 import com.example.chatserver.domain.user.User;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,5 +27,12 @@ public class Message extends AbstractEntity {
 
     @Column(length = 1000, nullable = false)
     private String message;
+
+    @Builder
+    public Message(User sender, Room room, String message) {
+        this.sender = sender;
+        this.room = room;
+        this.message = message;
+    }
 }
 

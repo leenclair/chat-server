@@ -17,4 +17,9 @@ public class ProfileReaderImpl implements ProfileReader {
         Optional<Profile> profile = profileRepository.findByUserId(userId);
         return profile.map(Profile::getNickname).orElse(null);
     }
+
+    @Override
+    public Profile getProfile(Long userId) {
+        return profileRepository.findByUserId(userId).orElse(null);
+    }
 }

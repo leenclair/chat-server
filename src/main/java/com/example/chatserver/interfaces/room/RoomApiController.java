@@ -23,6 +23,7 @@ public class RoomApiController {
     */
     @PostMapping("/one-to-one")
     public ResponseEntity<?> createOneToOneRoom(@RequestBody RoomDto.OneToOneRoomRequest request) {
+        log.info("[ROOM API] createOneToOneRoom request: {}", request);
         var response = roomFacade.checkOrCreateOneToOneRoom(request.getFriendId());
 
         return ResponseEntity.ok(response);
