@@ -24,6 +24,7 @@ public class RoomServiceImpl implements RoomService {
     private final ProfileReader profileReader;
     private final UserRoomStore userRoomStore;
     private final UserReader userReader;
+    private final RoomReader roomReader;
 
     @Override
     @Transactional
@@ -51,6 +52,12 @@ public class RoomServiceImpl implements RoomService {
         createUserRoom(user2Id, savedRoom);
 
         return savedRoom;
+    }
+
+    @Override
+    public Room findByRoomId(Long roomId) {
+        return roomReader.readRoom(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("Room not found with ID: " + roomId));
     }
 
     private void createUserRoom(Long userId, Room room) {

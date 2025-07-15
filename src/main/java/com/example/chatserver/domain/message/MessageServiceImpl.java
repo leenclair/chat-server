@@ -6,6 +6,7 @@ import com.example.chatserver.domain.profile.ProfileReader;
 import com.example.chatserver.domain.userroom.UserRoom;
 import com.example.chatserver.domain.userroom.UserRoomReader;
 import com.example.chatserver.interfaces.message.MessageDto;
+import com.example.chatserver.interfaces.stomp.StompMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
     private final MessageReader messageReader;
+    private final MessageStore messageStore;
     private final ProfileReader profileReader;
     private final UserRoomReader userRoomReader;
 
@@ -35,6 +37,12 @@ public class MessageServiceImpl implements MessageService {
 
                     return new MessageDto.Main(currentUserId, message, profile, notReadCount);
                 }).toList();
+    }
+
+    @Override
+    public void saveMessage(Message message) {
+        Message saveMessage = messageStore.store(message);
+        log.info("save message, result id:{}", saveMessage.getId());
     }
 
     private int calculateNotReadCountForOneToOne(Message message, UserRoom userRoom) {

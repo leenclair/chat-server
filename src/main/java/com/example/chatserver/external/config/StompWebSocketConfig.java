@@ -1,4 +1,4 @@
-package com.example.chatserver.security;
+package com.example.chatserver.external.config;
 
 import com.example.chatserver.security.handler.StompHandler;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,11 +32,11 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        // 메시지 발행 prefix 설정
-        registry.setApplicationDestinationPrefixes("/publish");
+        // 메시지를 서버로 보낼 때 prefix
+        registry.setApplicationDestinationPrefixes("/pub");
 
-        // 메시지 구독 prefix 설정
-        registry.enableSimpleBroker("/topic");
+        // 메시지를 브라우저로 보내줄 prefix
+        registry.enableSimpleBroker("/sub");
     }
 
     @Override
