@@ -5,6 +5,8 @@ import com.example.chatserver.domain.profile.Profile;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.format.DateTimeFormatter;
+
 public class MessageDto {
 
     @Getter
@@ -14,9 +16,11 @@ public class MessageDto {
         private final String profileImageUrl;
         private final boolean isMine;
         private final Long userId;
+        private final String email;
         private final String nickname;
         private final String message;
         private final int notReadCount;
+        private final String timestamp;
 
         public Main(Long currentUserId,
                     Message message,
@@ -27,8 +31,10 @@ public class MessageDto {
             this.profileImageUrl = "http://localhost/api/v1/profile/image/"
                     + profile.getProfileImage().getProfileImageFile().getFileOrgName();
             this.userId = message.getSender().getId();
+            this.email = message.getSender().getEmail();
             this.nickname = profile.getNickname();
             this.message = message.getMessage();
+            this.timestamp = message.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             this.notReadCount = notReadCount;
         }
     }

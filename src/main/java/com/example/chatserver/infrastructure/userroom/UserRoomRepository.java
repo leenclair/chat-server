@@ -23,4 +23,5 @@ public interface UserRoomRepository extends JpaRepository<UserRoom,Long> {
             "JOIN FETCH ur.user " +
             "WHERE ur.user.id = :userId AND ur.room.id = :roomId")
     Optional<UserRoom> findByUserIdAndRoomId(Long userId, Long roomId);
+    Optional<UserRoom> findByRoomId(Long roomId);
 }

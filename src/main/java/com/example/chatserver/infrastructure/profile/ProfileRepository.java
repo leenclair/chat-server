@@ -14,6 +14,5 @@ public interface ProfileRepository extends JpaRepository<Profile,Long> {
     @Query("UPDATE Profile p SET p.profileImage = :profileImage " +
             "WHERE p.id = :profileId")
     void updateProfileImageId(@Param("profileId") Long profileId, @Param("profileImage") ProfileImage profileImage);
-
     Optional<Profile> findByUserId(Long userId);
 }

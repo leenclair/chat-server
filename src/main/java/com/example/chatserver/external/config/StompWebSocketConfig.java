@@ -2,9 +2,11 @@ package com.example.chatserver.external.config;
 
 import com.example.chatserver.security.handler.StompHandler;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -36,12 +38,23 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/pub");
 
         // 메시지를 브라우저로 보내줄 prefix
-        registry.enableSimpleBroker("/sub");
+        registry.enableSimpleBroker("/sub")
+                .setHeartbeatValue(new long[]{10000, 10000}) // 10초마다 heartbeat
+                .setTaskScheduler(heartBeatScheduler());
     }
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         registration.interceptors(stompHandler);
+    }
+
+    @Bean
+    public ThreadPoolTaskScheduler heartBeatScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(1);
+        scheduler.setThreadNamePrefix("wss-heartbeat-thread-");
+        scheduler.initialize();
+        return scheduler;
     }
 
 }

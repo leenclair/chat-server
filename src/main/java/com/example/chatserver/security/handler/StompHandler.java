@@ -86,5 +86,6 @@ public class StompHandler implements ChannelInterceptor {
             throw new MessagingException("Invalid destination format");
         }
         String roomId = parts[ROOM_ID_INDEX];
+        // Todo 여기에 방 접근 권한을 검증하는 로직 추가필요.
     }
 }

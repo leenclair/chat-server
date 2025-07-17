@@ -19,7 +19,7 @@ public class ProfileReaderImpl implements ProfileReader {
     }
 
     @Override
-    public Profile getProfile(Long userId) {
-        return profileRepository.findByUserId(userId).orElse(null);
+    public Optional<Profile> getProfile(Long userId) {
+        return profileRepository.findByUserId(userId);
     }
 }

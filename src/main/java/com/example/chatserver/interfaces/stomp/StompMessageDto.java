@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString
 public class StompMessageDto {
     private Long roomId;
+    private String senderEmail;
     private String message;
 
     public Message toEntity(Room room, User sender) {

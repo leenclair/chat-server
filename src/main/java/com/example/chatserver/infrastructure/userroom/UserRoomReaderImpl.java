@@ -23,4 +23,5 @@ public class UserRoomReaderImpl implements UserRoomReader {
     public Optional<UserRoom> findByUserIdAndRoomId(Long userId, Long roomId) {
         return userRoomRepository.findByUserIdAndRoomId(userId, roomId);
     }
+
 }

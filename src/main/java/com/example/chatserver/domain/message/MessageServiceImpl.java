@@ -31,8 +31,9 @@ public class MessageServiceImpl implements MessageService {
         List<Message> messages = messageReader.getMessagesByRoomId(roomId);
         return messages.stream()
                 .map(message -> {
-                    Profile profile = profileReader.getProfile(message.getSender().getId());
-                    if(profile ==null){ throw new EntityNotFoundException("Profile not found for user ID: " + message.getSender().getId()); }
+                    Profile profile = profileReader.getProfile(message.getSender().getId()).orElseThrow(
+                        () -> new EntityNotFoundException("Profile not found for user ID: " + message.getSender().getId())
+                    );
                     int notReadCount = calculateNotReadCountForOneToOne(message, userRoom);
 
                     return new MessageDto.Main(currentUserId, message, profile, notReadCount);
@@ -40,9 +41,10 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public void saveMessage(Message message) {
+    public Message saveMessage(Message message) {
         Message saveMessage = messageStore.store(message);
         log.info("save message, result id:{}", saveMessage.getId());
+        return saveMessage;
     }
 
     private int calculateNotReadCountForOneToOne(Message message, UserRoom userRoom) {
