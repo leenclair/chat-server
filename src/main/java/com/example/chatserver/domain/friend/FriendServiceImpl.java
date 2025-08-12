@@ -2,6 +2,7 @@ package com.example.chatserver.domain.friend;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,7 @@ public class FriendServiceImpl implements FriendService {
         return friendReader.findAllByReceiverId(receiverId);
     }
 
+    @CacheEvict(value = "friends", key = "#friend.receiver.id")
     @Override
     public Friend save(Friend friend) {
         return friendStore.store(friend);
